@@ -19,7 +19,7 @@ Route::middleware('auth:api')->group(callback: function () {
         Route::put('/task/{id}', TaskUpdateController::class)->name('task.update');
         Route::delete('/task/{id}', TaskDeleteController::class)->name('task.delete');
     });
-    Route::patch('/task/{id}', TaskStatusChangeController::class)->middleware('task_ownership')->name('task.patch');
+    Route::patch('/task/{id}', TaskStatusChangeController::class)->name('task.patch');
 });
 
 

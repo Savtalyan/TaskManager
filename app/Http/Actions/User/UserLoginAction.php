@@ -23,10 +23,8 @@ class UserLoginAction
      */
     public function handle(UserDTO $dto)
     {
-//        dd($dto);
         $user = $this->userReadRepository->getByEmail($dto->email);
-//        $user = User::query()->where('email', $dto->email)->first();
-        dd($user);
+
         if (!$user || !Hash::check($dto->password, $user->password)) {
             throw new InvalidCredentialsException();
         }

@@ -4,19 +4,17 @@ namespace App\Http\Actions\Task;
 
 use App\DTOs\TaskDTO;
 use App\Models\Task;
+use App\Repositories\Write\Task\TaskWriteRepositoryInterface;
 
 class TaskCreateAction
 {
+    protected TaskWriteRepositoryInterface $taskWriteRepository;
+    public function __construct(TaskWriteRepositoryInterface $taskWriteRepository)
+    {
+        $this->taskWriteRepository = $taskWriteRepository;
+    }
     public function handle(TaskDTO $taskDTO)
     {
-
-        return Task::create([
-            'assignee' => $taskDTO->assignee,
-            'assigner' => $taskDTO->assigner,
-            'subject' => $taskDTO->subject,
-            'description' => $taskDTO->description,
-            'priority' => $taskDTO->priority,
-            'due_date' => $taskDTO->due_date
-        ]);
+        return $this->taskWriteRepository->create($taskDTO->toArray());
     }
 }

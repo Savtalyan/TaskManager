@@ -3,14 +3,20 @@
 namespace App\Http\Actions\Task;
 
 use App\Models\Task;
+use App\Repositories\Write\Task\TaskWriteRepositoryInterface;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class TaskDeleteAction
 {
+    protected TaskWriteRepositoryInterface $taskWriteRepository;
+
+    public function __construct(TaskWriteRepositoryInterface $taskWriteRepository)
+    {
+        $this->taskWriteRepository = $taskWriteRepository;
+    }
+
     public function handle(int $id)
     {
-        $task = Task::query()->findOrFail($id);
-
-        $task->delete();
+        $this->taskWriteRepository->delete($id);
     }
 }

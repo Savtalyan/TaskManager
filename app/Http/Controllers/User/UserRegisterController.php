@@ -13,6 +13,7 @@ class UserRegisterController extends Controller
     {
         try {
             $response = $action->handle($request->toDTO());
+            dispatch()
             return response()->json([
                 'message' => 'User registered successfully.',
                 'access_token' => $response['access_token'],
