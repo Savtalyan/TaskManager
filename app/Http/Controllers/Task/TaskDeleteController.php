@@ -13,10 +13,12 @@ class TaskDeleteController extends Controller
     {
         try {
             $action->handle($id);
+
             return response()->json([
                 'message' => 'Task successfully deleted.'
             ], 201);
         } catch (ModelNotFoundException $exception) {
+
             return response()->json([
                 'message' => $exception->getMessage()
             ], 401);

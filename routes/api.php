@@ -6,8 +6,7 @@ use App\Http\Controllers\Task\TaskUpdateController;
 use App\Http\Controllers\User\UserLoginController;
 use App\Http\Controllers\User\UserRegisterController;
 use Illuminate\Support\Facades\Route;
-use Laravel\Passport\Http\Controllers\AccessTokenController;
-
+use App\Http\Controllers\Task\TaskStatusChangeController;
 
 
 Route::post('/register', UserRegisterController::class)->name('register');
@@ -16,10 +15,11 @@ Route::post('/login', UserLoginController::class)->name('login');
 
 Route::middleware('auth:api')->group(callback: function () {
     Route::middleware('role:admin')->group(callback: function () {
-        Route::post('/task', TaskCreateController::class)->middleware('role:admin')->name('task.create');
-        Route::put('/task/{id}', TaskUpdateController::class)->middleware('role:admin')->name('task.update');
-        Route::delete('/task/{id}', TaskDeleteController::class)->middleware('role:admin')->name('task.delete');
+        Route::post('/task', TaskCreateController::class)->name('task.create');
+        Route::put('/task/{id}', TaskUpdateController::class)->name('task.update');
+        Route::delete('/task/{id}', TaskDeleteController::class)->name('task.delete');
     });
+    Route::patch('/task/{id}', TaskStatusChangeController::class)->middleware('task_ownership')->name('task.patch');
 });
 
 

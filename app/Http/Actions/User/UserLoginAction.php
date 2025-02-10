@@ -4,6 +4,7 @@ namespace App\Http\Actions\User;
 
 use App\Exceptions\InvalidCredentialsException;
 use App\Models\User;
+use App\Repositories\Read\User\UserReadRepositoryInterface;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
 use App\DTOs\UserDTO;
@@ -11,12 +12,21 @@ use App\DTOs\UserDTO;
 
 class UserLoginAction
 {
+    protected UserReadRepositoryInterface $userReadRepository;
+
+    public function __construct(UserReadRepositoryInterface $userReadRepository)
+    {
+        $this->userReadRepository = $userReadRepository;
+    }
     /**
      * @throws InvalidCredentialsException
      */
     public function handle(UserDTO $dto)
     {
-        $user = User::query()->where('email', $dto->email)->first();
+//        dd($dto);
+        $user = $this->userReadRepository->getByEmail($dto->email);
+//        $user = User::query()->where('email', $dto->email)->first();
+        dd($user);
         if (!$user || !Hash::check($dto->password, $user->password)) {
             throw new InvalidCredentialsException();
         }

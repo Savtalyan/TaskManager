@@ -7,10 +7,23 @@ class UserDTO
     public ?string $email = null;
     public ?string $password = null;
 
-    public function __construct(string $email, string $password, string $name = null)
+    public function __construct(
+        string $email,
+        string $password,
+        string $name = null
+    )
     {
         $this->name = $name;
         $this->email = $email;
         $this->password = $password;
+    }
+
+    public function toArray() : array
+    {
+        return [
+            'name' => $this->name,
+            'email' => $this->email,
+            'password' => $this->password,
+        ];
     }
 }
