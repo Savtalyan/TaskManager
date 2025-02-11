@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\User;
 
+use App\Events\UserRegisteredEvent;
 use App\Exceptions\UserAlreadyExistsException;
 use App\Http\Actions\User\UserRegisterAction;
 use App\Http\Controllers\Controller;
@@ -11,19 +12,6 @@ class UserRegisterController extends Controller
 {
     public function __invoke(UserRegisterRequest $request, UserRegisterAction $action)
     {
-        try {
-            $response = $action->handle($request->toDTO());
-            dispatch()
-            return response()->json([
-                'message' => 'User registered successfully.',
-                'access_token' => $response['access_token'],
-                'refresh_token' => $response['refresh_token'],
-                'expires_in' => $response['expires_in']
-            ], 201);
-        } catch (UserAlreadyExistsException $exception) {
-            return response()->json([
-                'message' => $exception->getMessage(),
-            ], 409);
-        }
+        $response = $action->handle($request->toDTO());
     }
 }
