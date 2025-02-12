@@ -13,24 +13,6 @@ class TaskUpdateController extends Controller
 {
     public function __invoke(TaskUpdateRequest $request, TaskUpdateAction $action, int $id): JsonResponse
     {
-        try {
-            $task = $action->handle($request->toDto(), $id);
-            return response()->json([
-                'message' => 'Task successfully updated.',
-            ]);
-        }
-        catch (ModelNotFoundException $e) {
-            return response()->json([
-                'message' => $e->getMessage(),
-                'code' => $e->getCode()
-            ]);
-        }
-        catch (TaskUpdateException $exception)
-        {
-            return response()->json([
-                'message' => $exception->getMessage(),
-                'code' => $exception->getCode()
-            ]);
-        }
+        return $action->handle($request->toDto(), $id);
     }
 }

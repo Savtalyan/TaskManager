@@ -3,6 +3,7 @@
 namespace App\Http\Actions\Task;
 
 use App\DTOs\TaskDTO;
+use App\Exceptions\TaskException;
 use App\Models\Task;
 use App\Repositories\Write\Task\TaskWriteRepositoryInterface;
 
@@ -15,6 +16,7 @@ class TaskCreateAction
     }
     public function handle(TaskDTO $taskDTO)
     {
-        return $this->taskWriteRepository->create($taskDTO->toArray());
+            $response = $this->taskWriteRepository->create($taskDTO->toArray());
+            return $response->json();
     }
 }

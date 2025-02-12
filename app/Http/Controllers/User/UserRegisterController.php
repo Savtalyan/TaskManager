@@ -10,8 +10,8 @@ use App\Http\Requests\User\UserRegisterRequest;
 
 class UserRegisterController extends Controller
 {
-    public function __invoke(UserRegisterRequest $request, UserRegisterAction $action)
+    public function __invoke(UserRegisterRequest $request, UserRegisterAction $action) : \Illuminate\Http\JsonResponse
     {
-        $response = $action->handle($request->toDTO());
+        return $action->handle($request->toDTO());
     }
 }

@@ -18,5 +18,9 @@ class TaskDeleteAction
     public function handle(int $id)
     {
         $this->taskWriteRepository->delete($id);
+
+        return response()->json([
+            'message' => 'Task deleted'
+        ]);
     }
 }

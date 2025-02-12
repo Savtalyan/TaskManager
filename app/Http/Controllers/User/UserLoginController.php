@@ -10,23 +10,12 @@ use Illuminate\Http\JsonResponse;
 
 class UserLoginController extends Controller
 {
-    public function __invoke(UserLoginRequest $request, UserLoginAction $action) : JsonResponse|array
+
+    /**
+     * @throws InvalidCredentialsException
+     */
+    public function __invoke(UserLoginAction $action, UserLoginRequest $request)
     {
-
-        try {
-            $response = $action->handle($request->toDTO());
-            return response()->json([
-                'message' => 'Login successful',
-                'access_token' => $response['access_token'],
-                'refresh_token' => $response['refresh_token'],
-                'expires_in' => $response['expires_in'],
-            ], 201);
-        }
-        catch (InvalidCredentialsException $exception) {
-            return response()->json([
-                'message' => $exception->getMessage(),
-            ], 401);
-        }
-
+        return $action->handle($request->toDTO());
     }
 }

@@ -11,5 +11,7 @@ interface TaskWriteRepositoryInterface
     public function delete(int $id) : void;
     public function findById(int $id) : Task;
 
+    public function save(Task $task) : void;
+
 
 }

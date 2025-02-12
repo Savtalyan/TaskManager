@@ -31,4 +31,9 @@ class TaskWriteRepository implements TaskWriteRepositoryInterface
     {
         return Task::find($id);
     }
+
+    public function save(Task $task): void
+    {
+        $task->save();
+    }
 }

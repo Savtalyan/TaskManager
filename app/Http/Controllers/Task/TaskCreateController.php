@@ -13,16 +13,6 @@ class TaskCreateController extends Controller
 {
     public function __invoke(TaskCreateRequest $request, TaskCreateAction $action) : JsonResponse
     {
-        try {
-            $task = $action->handle($request->toDTO());
-
-            return response()->json([
-                'message' => 'Task created successfully',
-            ]);
-        } catch (TaskException $exception) {
-            return response()->json([
-                'message' => $exception->getMessage()
-            ], 401);
-        }
+       return $action->handle($request->toDTO());
     }
 }

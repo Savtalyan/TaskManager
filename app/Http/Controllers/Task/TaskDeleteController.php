@@ -11,17 +11,6 @@ class TaskDeleteController extends Controller
 {
     public function __invoke(TaskDeleteAction $action, int $id) : JsonResponse
     {
-        try {
-            $action->handle($id);
-
-            return response()->json([
-                'message' => 'Task successfully deleted.'
-            ], 201);
-        } catch (ModelNotFoundException $exception) {
-
-            return response()->json([
-                'message' => $exception->getMessage()
-            ], 401);
-        }
+        return $action->handle($id);
     }
 }

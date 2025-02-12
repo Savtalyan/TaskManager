@@ -22,10 +22,18 @@ class TaskStatusChangeAction
         $userID = auth()->id();
 
         if ($userID !== $task->assignee) {
-            abort(Response::HTTP_FORBIDDEN);
+            return response()->json([
+                'message' => 'You cannot perform this action.',
+                'code' => Response::HTTP_FORBIDDEN
+            ]);
         }
 
         $task->status = $status;
-        $task->save();
+        $this->taskWriteRepository->save($task);
+
+        return response()->json([
+            'message' => 'Task status has been changed.',
+            'code' => Response::HTTP_OK
+        ]);
     }
 }

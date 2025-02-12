@@ -2,6 +2,7 @@
 
 namespace App\Http\Actions\User;
 
+use App\Events\UserRegisteredEvent;
 use App\Exceptions\UserAlreadyExistsException;
 use App\Repositories\Read\User\UserReadRepositoryInterface;
 use App\Repositories\Write\User\UserWriteRepositoryInterface;
@@ -39,15 +40,15 @@ class UserRegisterAction
 
             $createdUser = $this->userWriteRepository->create($userDto->toArray());
 
-            $response = HTTP::post(url: env('OAUTH_TOKEN_URL'), data: [
-                    'grant_type' => 'password',
-                    'client_id' => config('services.passport.client_id'),
-                    'client_secret' => config('services.passport.client_secret'),
-                    'username' => $userDto->email,
-                    'password' => $userDto->password
-
-                ]);
-
+            $response =  Http::asForm()->post(url: config('services.passport.request_token_url'), data: [
+                'grant_type' => 'password',
+                'client_id' => config('services.passport.client_id'),
+                'client_secret' => config('services.passport.client_secret'),
+                'username' => $userDto->email,
+                'password' => $userDto->password,
+                'scope' => '*'
+            ]);
+            event(new UserRegisteredEvent($createdUser));
             return $response->json();
         }
         catch (ConnectionException|UserAlreadyExistsException $exception)

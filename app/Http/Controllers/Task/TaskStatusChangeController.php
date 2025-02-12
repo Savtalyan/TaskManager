@@ -15,10 +15,6 @@ class TaskStatusChangeController extends Controller
     public function __invoke(TaskStatusChangeAction $action, TaskStatusChangeRequest $request, int $id)
     {
         $status = $request->toDTO()->status;
-        $action->handle($id, $status);
-
-        return response()->json([
-            'Task status updated successfully!'
-        ]);
+        return $action->handle($id, $status);
     }
 }

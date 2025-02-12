@@ -31,6 +31,7 @@ return [
     'passport' => [
         'client_id' => env('OAUTH_CLIENT_ID'),
         'client_secret' => env('OAUTH_CLIENT_SECRET'),
+        'request_token_url' => env('REQUEST_TOKEN_URL'),
     ],
 
     'slack' => [
