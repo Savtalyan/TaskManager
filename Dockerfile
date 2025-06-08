@@ -1,42 +1,33 @@
 FROM php:8.2-fpm
 
+# Install system dependencies
 RUN apt-get update && apt-get install -y \
     build-essential \
     libpng-dev \
     libjpeg62-turbo-dev \
     libfreetype6-dev \
-    zip \
-    unzip \
-    git \
-    curl \
-    libonig-dev \
-    libxml2-dev \
-    libzip-dev \
-    && docker-php-ext-install pdo_mysql mbstring zip exif pcntl bcmath
+    zip unzip git curl \
+    libonig-dev libxml2-dev libzip-dev \
+    && docker-php-ext-install pdo_mysql mbstring zip exif pcntl bcmath \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
+# Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-WORKDIR /var/www/html
+# Set working directory
+WORKDIR /var/www/TaskManager
 
+# Copy app code
 COPY . .
 
-RUN composer install && \
-    chown -R www-data:www-data /var/www/html && \
-    chmod -R 755 /var/www/html/storage
+# Trust git folder (Laravel specific issue with Composer)
+RUN git config --global --add safe.directory /var/www/TaskManager
 
-
-# Copy .env if not present
-RUN if [ ! -f .env ]; then cp .env.example .env; fi
-
-# Install PHP dependencies
-RUN composer install --no-interaction --prefer-dist --optimize-autoloader
-
-# Set permissions
-RUN chown -R www-data:www-data /var/www/html \
-    && chmod -R 755 /var/www/html/storage /var/www/html/bootstrap/cache
-
-# Run Laravel setup commands
-RUN php artisan key:generate
-
+# Expose port
 EXPOSE 8001
+
+# Default commands
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]
 CMD ["php-fpm"]
