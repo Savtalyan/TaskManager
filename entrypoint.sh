@@ -23,15 +23,14 @@ fi
 
 # Fix permissions
 echo "🔧 Fixing permissions..."
-chmod -R 775 storage bootstrap/cache || true
+chown -R www-data:www-data /var/www/TaskManager/storage /var/www/TaskManager/bootstrap/cache
+chmod -R 775 /var/www/TaskManager/storage /var/www/TaskManager/bootstrap/cache
 
 # Run migrations
 echo "📂 Running migrations..."
 php artisan migrate --force || true
 
-# Seed DB
-
-# Orchid setup
+# Orchid setup (Optional, only if needed)
 if [ ! -f "config/platform.php" ]; then
   echo "🧩 Installing Orchid platform..."
   php artisan orchid:install || true
