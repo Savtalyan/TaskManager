@@ -2,11 +2,12 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * App\Models\Priority
+ * App\Models\PriorityFactory
  *
  * @property int $id
  * @property string $name
@@ -15,7 +16,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class Priority extends Model
 {
-    protected $table = 'priority';
+    use HasFactory;
+
+    protected $table = 'priorities';
 
     protected $fillable = [
         'name',

@@ -33,7 +33,6 @@ use Illuminate\Support\Carbon;
 class Task extends Model
 {
     use HasFactory;
-
     protected $fillable = [
         'assigner_id',
         'assignee_id',

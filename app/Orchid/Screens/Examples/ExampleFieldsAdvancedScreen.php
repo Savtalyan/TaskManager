@@ -241,7 +241,7 @@ class ExampleFieldsAdvancedScreen extends Screen
                         ])
                         ->help('Radio buttons are normally presented in radio groups'),
 
-                ])->title('Status'),
+                ])->title('StatusFactory'),
             ]),
 
             Layout::rows([

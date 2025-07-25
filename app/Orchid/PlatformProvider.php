@@ -40,7 +40,7 @@ class PlatformProvider extends OrchidServiceProvider
             Menu::make('Tasks')
                 ->icon('bs.card-text')
                 ->list([
-                    Menu::make('All Tasks')->icon('bs.card-text'),
+                    Menu::make('All Tasks')->icon('bs.card-text')->route('platform.tasks'),
                     Menu::make('My Tasks')->icon('bs.card-text')
                 ]),
 

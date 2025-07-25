@@ -3,6 +3,8 @@ set -e
 
 cd /var/www/TaskManager
 
+git config --global --add safe.directory /var/www/TaskManager
+
 # .env setup if missing
 if [ ! -f ".env" ] && [ -f ".env.example" ]; then
   echo "🔐 Setting up environment file..."
@@ -14,6 +16,9 @@ if [ ! -f ".env" ] && [ -f ".env.example" ]; then
   sed -i "s/^DB_USERNAME=.*/DB_USERNAME=$DB_USERNAME/" .env
   sed -i "s/^DB_PASSWORD=.*/DB_PASSWORD=$DB_PASSWORD/" .env
 fi
+
+composer install --no-interaction --prefer-dist --optimize-autoloader
+npm install
 
 # Generate app key if missing or empty
 if ! grep -q "^APP_KEY=" .env || grep -q "^APP_KEY=$" .env; then

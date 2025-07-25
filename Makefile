@@ -23,3 +23,7 @@ reset:
 	docker compose build
 	docker compose up -d
 	make setup
+
+
+make bash:
+	docker exec -it app /bin/bash
