@@ -6,30 +6,53 @@ services:
             context: .
             dockerfile: Dockerfile
         volumes:
-            - .:/var/www/TaskManager  # Correct the volume mount
-        ports:
-            - "9000:9000"  # PHP-FPM listening on 9000 inside the container
+            - .:/var/www/TaskManager
         working_dir: /var/www/TaskManager
+        environment:
+            - DB_HOST=mysql
+            - DB_DATABASE=laravel
+            - DB_USERNAME=laravel
+            - DB_PASSWORD=laravel
         depends_on:
-            - db  # Ensure that the DB service is started before this one
+            - mysql
+        networks:
+            - taskmanager
 
     # MySQL Service
-    db:
-        image: mysql:8
+    mysql:
+        image: mysql:8.0
         container_name: mysql-db
         restart: always
+        ports:
+            - "3307:3306"
         environment:
             MYSQL_ROOT_PASSWORD: root
             MYSQL_DATABASE: laravel
             MYSQL_USER: laravel
             MYSQL_PASSWORD: laravel
+        volumes:
+            - mysql_data:/var/lib/mysql
+        networks:
+            - taskmanager
+
     # Web Server (Nginx)
     nginx:
         image: nginx:alpine
         container_name: nginx
         ports:
-            - "8081:80"  # Exposing Nginx on port 8081
+            - "8080:80"
         volumes:
-            - .:/var/www/TaskManager  # Correct volume for Nginx
-            - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf  # Nginx config
+            - .:/var/www/TaskManager
+            - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+        depends_on:
+            - app
+        networks:
+            - taskmanager
+
+volumes:
+    mysql_data:
+
+networks:
+    taskmanager:
+        driver: bridge
 

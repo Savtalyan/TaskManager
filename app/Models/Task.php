@@ -34,6 +34,7 @@ class Task extends Model
 {
     use HasFactory;
     protected $fillable = [
+        'creator_id',
         'assigner_id',
         'assignee_id',
         'status_id',
@@ -41,6 +42,12 @@ class Task extends Model
         'subject',
         'description',
         'due_date'
+    ];
+
+    protected $with = ['status', 'priority', 'assignee', 'assigner'];
+
+    protected $casts = [
+        'due_date' => 'datetime',
     ];
 
     public function assignee(): BelongsTo
@@ -55,17 +62,17 @@ class Task extends Model
 
     public function creator(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'assigner_id');
+        return $this->belongsTo(User::class, 'creator_id');
     }
 
-    public function status(): HasOne
+    public function status(): BelongsTo
     {
-        return $this->hasOne(Status::class, 'id', 'status_id');
+        return $this->belongsTo(Status::class, 'status_id');
     }
 
-    public function priority(): HasOne
+    public function priority(): BelongsTo
     {
-        return $this->hasOne(Priority::class, 'id', 'priority_id');
+        return $this->belongsTo(Priority::class, 'priority_id');
     }
 
 }

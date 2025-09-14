@@ -11,11 +11,15 @@ RUN apt-get update && apt-get install -y \
     zip \
     git \
     libicu-dev \
+    netcat-openbsd \
     && docker-php-ext-configure zip \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install gd zip intl pdo pdo_mysql \
-    && apt-get clean
-
-# Set ownership and permissions for Laravel's storage and cache
+    && apt-get install -y curl gnupg && \
+    curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && \
+    apt-get install -y nodejs \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
 # Install Composer (for PHP package management)
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
@@ -23,13 +27,19 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 # Set working directory
 WORKDIR /var/www/TaskManager
 
-# Copy the app code to the container
+# Copy the app code
 COPY . .
+
+# Set ownership and permissions for Laravel's storage and cache
+RUN chown -R www-data:www-data /var/www/TaskManager/storage /var/www/TaskManager/bootstrap/cache
+RUN chmod -R 775 /var/www/TaskManager/storage /var/www/TaskManager/bootstrap/cache
+
+# Make entrypoint executable
+RUN chmod +x ./entrypoint.sh
 
 # Expose the PHP-FPM port
 EXPOSE 9000
 
 # Start PHP-FPM
-RUN chmod +x ./entrypoint.sh
 ENTRYPOINT ["./entrypoint.sh"]
 CMD ["php-fpm"]

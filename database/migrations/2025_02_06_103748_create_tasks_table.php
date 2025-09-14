@@ -13,13 +13,14 @@ return new class extends Migration
     {
         Schema::create('tasks', function (Blueprint $table) {
             $table->id();
-            $table->integer('assignee')->nullable()->references('id')->on('users');
-            $table->integer('assigner')->nullable()->references('id')->on('users');
-            $table->string('status')->nullable();
-            $table->string('priority')->nullable();
-            $table->string('subject')->nullable();
+            $table->foreignId('creator_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('assignee_id')->nullable()->constrained('users')->onDelete('set null');
+            $table->foreignId('assigner_id')->nullable()->constrained('users')->onDelete('set null');
+            $table->foreignId('status_id')->constrained('statuses')->onDelete('restrict');
+            $table->foreignId('priority_id')->constrained('priorities')->onDelete('restrict');
+            $table->string('subject');
             $table->longText('description')->nullable();
-            $table->string('due_date')->nullable();
+            $table->timestamp('due_date')->nullable();
             $table->timestamps();
         });
     }

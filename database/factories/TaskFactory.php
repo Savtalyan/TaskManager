@@ -16,24 +16,14 @@ class TaskFactory extends Factory
     public function definition(): array
     {
         return [
-            'assigner' => User::factory(),
-            'assignee' => User::factory(),
-
-            // FIXED: wrap in closures so the ID is used
-            'status'   => Status::insert([
-                ['name' => 'To Do'],
-                ['name' => 'In Progress'],
-                ['name' => 'Done'],
-            ]),
-
-            'priority' => Priority::insert([
-                ['name' => 'Low'],
-                ['name' => 'Medium'],
-                ['name' => 'High'],
-            ]),
-            'subject'     => $this->faker->sentence(4),
+            'creator_id' => User::factory(),
+            'assigner_id' => User::factory(),
+            'assignee_id' => User::factory(),
+            'status_id' => Status::inRandomOrder()->first()->id ?? 1,
+            'priority_id' => Priority::inRandomOrder()->first()->id ?? 1,
+            'subject' => $this->faker->sentence(4),
             'description' => $this->faker->paragraph(),
-            'due_date'    => now()->addDays(rand(1, 30)),
+            'due_date' => now()->addDays(rand(1, 30)),
         ];
     }
 }

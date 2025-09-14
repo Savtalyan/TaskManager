@@ -25,7 +25,6 @@ class UserTableSeeder extends Seeder
             "email" => "user@gmail.com",
             "password" => bcrypt("useruser"),
         ]);
-        $admin->assignRole('admin');
-        $user->assignRole('user');
+        // Роли будут назначены через Orchid
     }
 }
